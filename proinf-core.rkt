@@ -138,7 +138,10 @@
 ;; ----------------------
 
 (define (symbol->term s)
-  (if (variable? s) (var s) (atom s)))
+  (cond
+    [(symbol? s) (if (variable? s) (var s) (atom s))]
+    [(number? s) (atom s)]
+    [else (error "symbol->term: unsupported type" s)]))
 
 (define (parse-term lst)
   (cond
@@ -170,14 +173,18 @@
 
 (define (pretty-print-term t)
   (cond
-    [(atom? t) (symbol->string (atom-name t))]
+    [(atom? t)
+     (define n (atom-name t))
+     (if (symbol? n)
+         (symbol->string n)
+         (format "~a" n))] ; handle numbers
     [(var? t) (symbol->string (var-name t))]
     [(compound? t)
      (string-append
       (symbol->string (compound-functor t))
       "("
       (string-join (map pretty-print-term (compound-args t)) ", ")
-      ")")]))  
+      ")")]))
 
 (define (pretty-print-clause c)
   (cond
