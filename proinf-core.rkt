@@ -41,6 +41,49 @@
                     (compound-args t)))]
     [else t]))
 
+;; Helper functions for variable renaming
+(define (collect-vars term)
+  (cond
+    [(var? term) (list (var-name term))]
+    [(compound? term)
+     (apply append (map collect-vars (compound-args term)))]
+    [else '()]))
+
+(define (collect-vars-clause clause)
+  (match clause
+    [(fact h) (collect-vars h)]
+    [(rule h body)
+     (append (collect-vars h)
+             (apply append (map collect-vars body)))]))
+
+(define var-counter 0)
+
+(define (fresh-var-name var-name)
+  (set! var-counter (add1 var-counter))
+  (string->symbol (format "~a_~a" var-name var-counter)))
+
+(define (rename-vars-in-term term var-map)
+  (cond
+    [(var? term)
+     (define new-name (hash-ref var-map (var-name term) #f))
+     (if new-name (var new-name) term)]
+    [(compound? term)
+     (compound (compound-functor term)
+               (map (lambda (arg) (rename-vars-in-term arg var-map))
+                    (compound-args term)))]
+    [else term]))
+
+(define (rename-vars-in-clause clause)
+  (define vars (collect-vars-clause clause))
+  (define var-map (make-hash (map (lambda (v) (cons v (fresh-var-name v))) vars)))
+  
+  (match clause
+    [(fact h)
+     (fact (rename-vars-in-term h var-map))]
+    [(rule h body)
+     (rule (rename-vars-in-term h var-map)
+           (map (lambda (b) (rename-vars-in-term b var-map)) body))]))
+
 (define (unify t1 t2 subst)
   (let ([t1 (apply-subst subst t1)]
         [t2 (apply-subst subst t2)])
@@ -83,8 +126,12 @@
                  (define s (unify g h subst))
                  (if s (resolve kb rest s) '())]
                 [(rule h body)
-                 (define s (unify g h subst))
-                 (if s (resolve kb (append body rest) s) '())])))]))
+                 ;; Rename variables in the rule before unification
+                 (define renamed-clause (rename-vars-in-clause clause))
+                 (define renamed-h (rule-head renamed-clause))
+                 (define renamed-body (rule-body renamed-clause))
+                 (define s (unify g renamed-h subst))
+                 (if s (resolve kb (append renamed-body rest) s) '())])))]))                 
 
 ;; ----------------------
 ;; Simple Parser (limited)
@@ -107,7 +154,7 @@
   (define sexpr (with-input-from-string str read))
   (cond
     ;; Case 1: (:- Head Body1 Body2 ...)
-    [(and (list? sexpr) (equal? (car sexpr) ':-))
+    [(and (list? sexpr) (equal? (car sexpr) ':-)) 
      (rule (parse-term (cadr sexpr))
            (map parse-term (cddr sexpr)))]
     ;; Case 2: (Head :- Body1 Body2 ...)
@@ -130,7 +177,7 @@
       (symbol->string (compound-functor t))
       "("
       (string-join (map pretty-print-term (compound-args t)) ", ")
-      ")")]))
+      ")")]))  
 
 (define (pretty-print-clause c)
   (cond
