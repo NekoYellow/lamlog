@@ -54,8 +54,8 @@
        #t]
       
       ;; Handle queries
-      [(regexp-match #px"^\\?-\\s+(.*)\\.$" line)
-       (define query-str (cadr (regexp-match #px"^\\?-\\s+(.*)\\.$" line)))
+      [(regexp-match #px"^\\?-\\s+(.*)$" line)
+       (define query-str (cadr (regexp-match #px"^\\?-\\s+(.*)$" line)))
        (define goals (parse-query query-str))
        (define results (resolve (kb-param) goals '()))
        (if (null? results)
