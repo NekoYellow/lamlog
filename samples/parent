@@ -6,14 +6,14 @@ assertz((parent tom anna)).
 ;; Assert the grandparent rule
 assertz(((grandparent X Y) :- (parent X Z) (parent Z Y))).
 
-;; Assert another fact to test the rule
+;; Assert a fact that contradicts the existing facts (flaw)
 assertz((grandparent john anna)).
 
 ;; Run a query
 ?- (grandparent X tom).
 
 ;; Another query
-?- (grandparent mary Y).
+?- (grandparent mary X).
 
 ;; List all clauses
 list.

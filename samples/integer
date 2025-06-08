@@ -1,0 +1,12 @@
+assertz((zero 0)).
+assertz((succ 0 1)).
+assertz((succ 1 2)).
+assertz((succ 2 3)).
+assertz((succ 3 4)).
+
+assertz(((less-than X Y) :- (succ X Y))).
+assertz(((less-than X Y) :- (succ X Z) (less-than Z Y))).
+
+?- (less-than 1 3).
+?- (less-than X Y).
+?- (less-than X 2).

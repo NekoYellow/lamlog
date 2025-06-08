@@ -1,0 +1,10 @@
+assertz((parent alice bob)).
+assertz((parent bob carol)).
+assertz((parent carol dave)).
+
+assertz(((ancestor X Y) :- (parent X Y))).
+assertz(((ancestor X Y) :- (parent X Z) (ancestor Z Y))).
+
+?- (ancestor alice dave).
+?- (ancestor dave alice).
+?- (ancestor bob X).
