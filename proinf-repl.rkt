@@ -55,7 +55,9 @@
              (define results (resolve (kb-param) goals '()))
              (if (null? results)
                  (printf "false.\n")
-                 (for-each print-subst results))])
+                 (begin
+                   (printf "true.\n")
+                   (for-each print-subst results)))])
           (loop)))))
 
 ;; Start the REPL when this file is executed directly

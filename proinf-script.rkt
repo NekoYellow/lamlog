@@ -28,7 +28,6 @@
              #f)
            (begin
              (kb-param (append (kb-param) (list new-clause)))
-             (printf "true.\n")
              #t))]
       
       ;; Handle retract command
@@ -43,7 +42,6 @@
              #f)
            (begin
              (kb-param new-kb)
-             (printf "true.\n")
              #t))]
       
       ;; Handle list command
@@ -62,7 +60,9 @@
        (define results (resolve (kb-param) goals '()))
        (if (null? results)
            (printf "false.\n")
-           (for-each print-subst results))
+           (begin
+             (printf "true.\n")
+             (for-each print-subst results)))
        #t]
       
       ;; Unrecognized command
