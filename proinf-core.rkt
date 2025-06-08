@@ -76,7 +76,7 @@
 (define (rename-vars-in-clause clause)
   (define vars (collect-vars-clause clause))
   (define var-map (make-hash (map (lambda (v) (cons v (fresh-var-name v))) vars)))
-  
+
   (match clause
     [(fact h)
      (fact (rename-vars-in-term h var-map))]
@@ -131,7 +131,7 @@
                  (define renamed-h (rule-head renamed-clause))
                  (define renamed-body (rule-body renamed-clause))
                  (define s (unify g renamed-h subst))
-                 (if s (resolve kb (append renamed-body rest) s) '())])))]))                 
+                 (if s (resolve kb (append renamed-body rest) s) '())])))]))
 
 ;; ----------------------
 ;; Simple Parser (limited)
@@ -197,34 +197,26 @@
       ".")]
     [else "(unknown clause)"]))
 
-(define (print-subst subst)
-  (for-each (lambda (pair)
-              (printf "~a = ~a\n"
-                      (symbol->string (car pair))
-                      (pretty-print-term (cdr pair))))
-            subst))
+(define (print-subst subst query)
+  (define result (apply-subst subst (car query)))
+  (printf "~a\n" (pretty-print-term result)))
 
 ;; ----------------------
 ;; Knowledge Base Parameter
 ;; ----------------------
 
-;; Use a parameter for the knowledge base
 (define kb-param
   (make-parameter
    '()))
-
-;; After the kb-param definition, add this helper function
 
 ;; ----------------------
 ;; Knowledge Base Helpers
 ;; ----------------------
 
-;; Check if a clause already exists in the knowledge base
 (define (clause-exists? clause kb)
   (for/or ([existing-clause kb])
     (equal? clause existing-clause)))
 
-;; Check if a clause conflicts with the current knowledge base
 (define (clause-conflicts? clause kb)
   (define head
     (cond

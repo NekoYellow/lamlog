@@ -62,7 +62,9 @@
            (printf "false.\n")
            (begin
              (printf "true.\n")
-             (for-each print-subst results)))
+             (for-each
+              (lambda (s) (print-subst s goals))
+              results)))
        #t]
       
       ;; Unrecognized command
