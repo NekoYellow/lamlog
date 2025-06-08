@@ -22,10 +22,11 @@
         (begin (printf "Goodbye.\n") (exit))
         (with-handlers ([exn:fail? (lambda (e) (printf "Error: ~a\n" (exn-message e)) (loop))])
           (cond
+            ;; Assertz command
             [(regexp-match #px"^assertz\\((.*)\\)\\.$" line)
              (define clause-str (regexp-match #px"^assertz\\((.*)\\)\\.$" line))
              (define new-clause (parse-clause (cadr clause-str)))
-             (cond ;; TODO: Check for invalid format
+             (cond
                [(clause-exists? new-clause (kb-param))
                 (printf "Error: Clause already exists in the knowledge base.\n")]
                [(clause-conflicts? new-clause (kb-param))
@@ -34,6 +35,7 @@
                 (begin
                    (kb-param (append (kb-param) (list new-clause)))
                    (printf "true.\n"))])]
+            ;; Retract command
             [(regexp-match #px"^retract\\((.*)\\)\\.$" line)
              (define clause-str (regexp-match #px"^retract\\((.*)\\)\\.$" line))
              (define clause-to-remove (parse-clause (cadr clause-str)))
@@ -44,12 +46,14 @@
                  (begin
                    (kb-param new-kb)
                    (printf "true.\n")))]
+            ;; List command
             [(regexp-match #px"^list\\.$" line)
              (if (null? (kb-param))
                  (printf "Knowledge base is empty.\n")
                  (begin
                    (printf "Current clauses in KB:\n")
                    (for-each (lambda (c) (printf "  ~a\n" (pretty-print-clause c))) (kb-param))))]
+            ;; Query
             [else
              (define goals (parse-query line))
              (define results (resolve (kb-param) goals '()))

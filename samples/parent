@@ -10,10 +10,10 @@ assertz(((grandparent X Y) :- (parent X Z) (parent Z Y))).
 assertz((grandparent john anna)).
 
 ;; Run a query
-?- (grandparent X tom).
+?- (grandparent X tom)
 
 ;; Another query
-?- (grandparent mary X).
+?- (grandparent mary X)
 
 ;; List all clauses
 list.

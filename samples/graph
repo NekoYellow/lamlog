@@ -6,10 +6,10 @@ assertz((edge 2 3)).
 assertz(((connected X Y) :- (edge X Y))).
 assertz(((connected X Y) :- (edge X Z) (connected Z Y))).
 
-?- (connected 1 X).
-?- (connected X 4).
+?- (connected 1 X)
+?- (connected X 4)
 
 assertz((edge 3 4)).
 
-?- (connected X 4).
-?- (connected 4 x).
+?- (connected X 4)
+?- (connected 4 x)
