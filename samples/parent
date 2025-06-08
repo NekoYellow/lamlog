@@ -1,0 +1,19 @@
+;; Assert some facts
+assertz((parent john mary)).
+assertz((parent mary tom)).
+assertz((parent tom anna)).
+
+;; Assert the grandparent rule
+assertz(((grandparent X Y) :- (parent X Z) (parent Z Y))).
+
+;; Assert another fact to test the rule
+assertz((grandparent john anna)).
+
+;; Run a query
+?- (grandparent X tom).
+
+;; Another query
+?- (grandparent mary A).
+
+;; List all clauses
+list.
