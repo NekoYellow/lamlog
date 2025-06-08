@@ -59,23 +59,6 @@
       [(regexp-match #px"^\\?-\\s+(.*)\\.$" line)
        (define query-str (cadr (regexp-match #px"^\\?-\\s+(.*)\\.$" line)))
        (define goals (parse-query query-str))
-       (display goals)
-       (newline)
-       (define results (resolve (kb-param) goals '()))
-       (if (null? results)
-           (printf "false.\n")
-           (for-each print-subst results))
-       #t]
-      
-      ;; Handle raw queries (without ?- prefix)
-      [(regexp-match #px"^[^\\s].*\\.$" line)
-       (define query-str (string-trim line #:right? #t #:left? #t))
-       ;; Remove trailing period if it exists
-       (define query-no-period
-         (if (regexp-match #px"\\.$" query-str)
-             (substring query-str 0 (sub1 (string-length query-str)))
-             query-str))
-       (define goals (parse-query query-no-period))
        (define results (resolve (kb-param) goals '()))
        (if (null? results)
            (printf "false.\n")

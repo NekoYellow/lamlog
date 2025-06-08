@@ -13,7 +13,7 @@ assertz((grandparent john anna)).
 ?- (grandparent X tom).
 
 ;; Another query
-?- (grandparent mary A).
+?- (grandparent mary Y).
 
 ;; List all clauses
 list.
