@@ -1,6 +1,6 @@
 # $\lambda$ Log
 
-**LambdaLog** is a Prolog-like logic programming language implemented in Racket. It supports facts, rules, and queries based on term unification and backward chaining resolution. LambdaLog can be used interactively via a REPL or execute a script containing logical clauses and queries.
+**LamLog** is a Prolog-like logic programming language implemented in Racket. It supports facts, rules, and queries based on term unification and backward chaining resolution. LamLog can be used interactively via a REPL or execute a script containing logical clauses and queries.
 
 ## Features
 
@@ -28,7 +28,7 @@ racket lamlog.rkt -f samples/script_file
 
 #### Syntax
 
-The script file should contain a sequence of LambdaLog commands, each on a separate line.
+The script file should contain a sequence of LamLog commands, each on a separate line.
 
 Each line is either one of the following:
 - A fact: `(<relation> <atom1> <atom2> ...).`.
@@ -104,7 +104,7 @@ Start an interactive session with `racket lamlog.rkt` and you will see the follo
 
 ```sh
 $ racket lamlog.rkt
-LambdaLog REPL. Enter queries like: (grandparent X carol)?
+LamLog REPL. Enter queries like: (grandparent X carol)?
 To add a fact: assertz((parent alice bob)).
 To add a rule: assertz(((grandparent X Y) :- (parent X Z) (parent Z Y))).
 To remove a clause: retract((parent alice bob)).

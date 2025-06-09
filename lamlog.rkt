@@ -11,7 +11,7 @@
   (command-line
    #:program "lamlog"
    #:once-each
-   [("-f" "--file") file-path "LambdaLog script file to load before REPL"
+   [("-f" "--file") file-path "LamLog script file to load before REPL"
     (script-file file-path)]
    [("-t" "--test") "Run in test mode (no REPL)"
     (test-mode? #t)]

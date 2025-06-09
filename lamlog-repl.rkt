@@ -9,7 +9,7 @@
 ;; ----------------------
 
 (define (repl)
-  (printf "LambdaLog REPL. Enter queries like: (grandparent X carol)?\n")
+  (printf "LamLog REPL. Enter queries like: (grandparent X carol)?\n")
   (printf "To add a fact: assertz((parent alice bob)).\n")
   (printf "To add a rule: assertz(((grandparent X Y) :- (parent X Z) (parent Z Y))).\n")
   (printf "To remove a clause: retract((parent alice bob)).\n")
