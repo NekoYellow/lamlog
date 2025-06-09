@@ -1,6 +1,6 @@
-# ProInferre
+# $\lambda$Log
 
-**ProInferre** is a Prolog-like logic programming language implemented in Racket. It supports facts, rules, and queries based on term unification and backward chaining resolution. ProInferre can be used interactively via a REPL or execute a script containing logical clauses and queries.
+**LambdaLog** is a Prolog-like logic programming language implemented in Racket. It supports facts, rules, and queries based on term unification and backward chaining resolution. LambdaLog can be used interactively via a REPL or execute a script containing logical clauses and queries.
 
 ## Features
 
@@ -19,7 +19,7 @@
 3. Run from the terminal:
 
 ```sh
-racket proinf.rkt -f samples/script_file
+racket lamlog.rkt -f samples/script_file
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ racket proinf.rkt -f samples/script_file
 
 #### Syntax
 
-The script file should contain a sequence of ProInferre commands, each on a separate line.
+The script file should contain a sequence of LambdaLog commands, each on a separate line.
 
 Each line is either one of the following:
 - A fact: `(<relation> <atom1> <atom2> ...).`.
@@ -44,20 +44,20 @@ There are certain restrictions of the naming of variables and constants:
 Run a script file:
 
 ```sh
-racket proinf.rkt -f samples/script_file
+racket lamlog.rkt -f samples/script_file
 ```
 
 A REPL will start afterwards with the knowledge base loaded from the script. To avoid this, use the `-t` or `--test` flag:
 
 ```sh
-racket proinf.rkt -f samples/script_file -t
+racket lamlog.rkt -f samples/script_file -t
 ```
 
 #### Example
 
 To get familiar with the syntax, let's look at the `ancestor` script:
 
-```
+```lamlog
 ;; Facts
 (parent alice bob).
 (parent bob carol).
@@ -86,7 +86,7 @@ The facts and rules together form a knowledge base. The query will be answered i
 
 Therefore, the output of the script will be:
 ```sh
-$ racket proinf.rkt -f samples/ancestor -t
+$ racket lamlog.rkt -f samples/ancestor -t
 true.
 (ancestor alice dave)
 false.
@@ -100,11 +100,11 @@ Executed 10 of 10 lines from samples/ancestor
 
 REPL allows you to interactively manipulate and query the knowledge base.
 
-Start an interactive session with `racket proinf.rkt` and you will see the following prompt:
+Start an interactive session with `racket lamlog.rkt` and you will see the following prompt:
 
 ```sh
-$ racket proinf.rkt
-ProInf REPL. Enter queries like: (grandparent X carol)?
+$ racket lamlog.rkt
+LambdaLog REPL. Enter queries like: (grandparent X carol)?
 To add a fact: assertz((parent alice bob)).
 To add a rule: assertz(((grandparent X Y) :- (parent X Z) (parent Z Y))).
 To remove a clause: retract((parent alice bob)).
@@ -116,8 +116,8 @@ To exit: exit.
 
 ## File Structure
 
-* `proinf-core.rkt`: Core logic (terms, unification, resolution)
-* `proinf-repl.rkt`: REPL loop
-* `proinf-script.rkt`: Script file runner
-* `proinf.rkt`: Main entry point
+* `lamlog-core.rkt`: Core logic (terms, unification, resolution)
+* `lamlog-repl.rkt`: REPL loop
+* `lamlog-script.rkt`: Script file runner
+* `lamlog.rkt`: Main entry point
 * `samples/`: Sample logic programs

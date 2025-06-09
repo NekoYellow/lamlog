@@ -2,7 +2,7 @@ import subprocess
 import os
 
 SAMPLES_DIR = "samples"
-PROINF_EXEC = ["racket", "proinf.rkt", "-t", "-f"]
+PROINF_EXEC = ["racket", "lamlog.rkt", "-t", "-f"]
 
 def run_test(script_path):
     result = subprocess.run(

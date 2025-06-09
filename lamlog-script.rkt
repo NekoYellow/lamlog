@@ -1,6 +1,6 @@
 #lang racket
 
-(require "proinf-core.rkt")
+(require "lamlog-core.rkt")
 
 (provide run-script)
 

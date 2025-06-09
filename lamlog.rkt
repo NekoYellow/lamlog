@@ -1,17 +1,17 @@
 #lang racket
 
-(require "proinf-core.rkt")
-(require "proinf-repl.rkt")
-(require "proinf-script.rkt")
+(require "lamlog-core.rkt")
+(require "lamlog-repl.rkt")
+(require "lamlog-script.rkt")
 
 (module+ main
   (define script-file (make-parameter #f))
   (define test-mode? (make-parameter #f))
 
   (command-line
-   #:program "proinf"
+   #:program "lamlog"
    #:once-each
-   [("-f" "--file") file-path "ProInf script file to load before REPL"
+   [("-f" "--file") file-path "LambdaLog script file to load before REPL"
     (script-file file-path)]
    [("-t" "--test") "Run in test mode (no REPL)"
     (test-mode? #t)]
