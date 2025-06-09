@@ -234,6 +234,7 @@
 
 (define (pretty-print-term t)
   (cond
+    [(null? t) ""]
     [(atom? t)
      (define n (atom-name t))
      (if (symbol? n)
@@ -242,13 +243,15 @@
     [(var? t) (symbol->string (var-name t))]
     [(compound? t)
      (string-append
-      (symbol->string (compound-functor t))
       "("
-      (string-join (map pretty-print-term (compound-args t)) ", ")
+      (symbol->string (compound-functor t))
+      " "
+      (string-join (map pretty-print-term (compound-args t)) " ")
       ")")]))
 
 (define (pretty-print-clause c)
   (cond
+    [(null? c) ""]
     [(fact? c) (string-append (pretty-print-term (fact-head c)) ".")]
     [(rule? c)
      (string-append
