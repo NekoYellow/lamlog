@@ -1,0 +1,11 @@
+true.
+(connected 1 2)
+(connected 1 3)
+false.
+true.
+(connected 3 4)
+(connected 1 4)
+(connected 2 4)
+false.
+Executed 15 of 15 lines from samples/graph
+

@@ -1,0 +1,6 @@
+true.
+(grandparent john tom)
+true.
+(grandparent mary anna)
+Executed 16 of 16 lines from samples/parent
+

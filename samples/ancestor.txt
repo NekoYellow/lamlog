@@ -1,0 +1,8 @@
+true.
+(ancestor alice dave)
+false.
+true.
+(ancestor bob carol)
+(ancestor bob dave)
+Executed 10 of 10 lines from samples/ancestor
+
