@@ -1,0 +1,19 @@
+true.
+(accessible alice doc1 read)
+true.
+(accessible alice doc1 write)
+true.
+(accessible alice doc2 read)
+false.
+true.
+(accessible bob doc1 read)
+false.
+true.
+(accessible bob doc2 read)
+true.
+(accessible bob doc2 write)
+true.
+(accessible carol doc1 read)
+false.
+Executed 25 of 25 lines from samples/permission
+

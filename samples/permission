@@ -1,0 +1,25 @@
+(true).
+(own alice doc1).
+(own bob doc2).
+
+(permission owner read).
+(permission owner write).
+(permission viewer read).
+
+;; Rule of User U's Role on resource X
+((role U owner X) :- (own U X)).
+((role U viewer X) :- (true)).
+
+;; Rule of Accessibility: Can User U access resource X with Action A?
+((accessible U X A) :- (role U R X) (permission R A)).
+
+(accessible alice doc1 read)?
+(accessible alice doc1 write)?
+(accessible alice doc2 read)?
+(accessible alice doc2 write)?
+(accessible bob doc1 read)?
+(accessible bob doc1 write)?
+(accessible bob doc2 read)?
+(accessible bob doc2 write)?
+(accessible carol doc1 read)?
+(accessible carol doc1 write)?

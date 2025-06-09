@@ -204,6 +204,7 @@ unify(likes(X, bob), likes(alice, Y), [])
 - `graph` 图和连通性。
 - `parent` 父辈和祖辈关系。
 - `integer` 自然数。
+- `permission` 权限检查。
 
 测试用例展示了该语言的一些缺陷：
 
