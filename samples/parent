@@ -1,19 +1,16 @@
 ;; Assert some facts
-assertz((parent john mary)).
-assertz((parent mary tom)).
-assertz((parent tom anna)).
+(parent john mary).
+(parent mary tom).
+(parent tom anna).
 
 ;; Assert the grandparent rule
-assertz(((grandparent X Y) :- (parent X Z) (parent Z Y))).
+((grandparent X Y) :- (parent X Z) (parent Z Y)).
 
 ;; Assert a fact that contradicts the existing facts (flaw)
-assertz((grandparent john anna)).
+(grandparent john anna).
 
 ;; Run a query
-?- (grandparent X tom)
+(grandparent X tom)?
 
 ;; Another query
-?- (grandparent mary X)
-
-;; List all clauses
-list.
+(grandparent mary X)?

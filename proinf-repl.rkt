@@ -9,7 +9,7 @@
 ;; ----------------------
 
 (define (repl)
-  (printf "ProInf REPL. Enter queries like: (grandparent X carol)\n")
+  (printf "ProInf REPL. Enter queries like: (grandparent X carol)?\n")
   (printf "To add a fact: assertz((parent alice bob)).\n")
   (printf "To add a rule: assertz(((grandparent X Y) :- (parent X Z) (parent Z Y))).\n")
   (printf "To remove a clause: retract((parent alice bob)).\n")
@@ -67,7 +67,8 @@
                    (for-each (lambda (c) (printf "  ~a\n" (pretty-print-clause c))) (kb-param))))]
             ;; Query
             [else
-             (define goals (parse-query line))
+             (define query-str (regexp-match #px"^(.*)\\?$" line))
+             (define goals (parse-query (cadr query-str)))
              (define results (resolve (kb-param) goals '()))
              (if (null? results)
                  (printf "false.\n")

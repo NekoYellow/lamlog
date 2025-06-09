@@ -19,11 +19,11 @@
       [(regexp-match #px"^\\s*;;" line) #t]
       
       ;; Handle assertz command
-      [(regexp-match #px"^assertz\\((.*)\\)\\.$" line)
-       (define clause-str (regexp-match #px"^assertz\\((.*)\\)\\.$" line))
+      [(regexp-match #px"^(.*)\\.$" line)
+       (define clause-str (regexp-match #px"^(.*)\\.$" line))
        (define clause-content (cadr clause-str))
        ;; Check for empty or malformed clause
-       (if (or (string=? clause-content "") 
+       (if (or (string=? clause-content "")
                (regexp-match #px"^\\s*$" clause-content)
                (regexp-match #px"^\\s*\\(\\s*\\)\\s*$" clause-content))
            (begin
@@ -38,40 +38,9 @@
                    (kb-param (append (kb-param) (list new-clause)))
                    #t))))]
       
-      ;; Handle retract command
-      [(regexp-match #px"^retract\\((.*)\\)\\.$" line)
-       (define clause-str (regexp-match #px"^retract\\((.*)\\)\\.$" line))
-       (define clause-content (cadr clause-str))
-       ;; Check for empty or malformed clause
-       (if (or (string=? clause-content "")
-               (regexp-match #px"^\\s*$" clause-content)
-               (regexp-match #px"^\\s*\\(\\s*\\)\\s*$" clause-content))
-           (begin
-             (printf "Error: Empty or malformed clause in retract command.\n")
-             #f)
-           (let ([clause-to-remove (parse-clause clause-content)]) ;; Changed define to let
-             (define original-kb (kb-param))
-             (define new-kb (filter (lambda (c) (not (equal? c clause-to-remove))) original-kb))
-             (if (= (length original-kb) (length new-kb))
-                 (begin
-                   (printf "Error: Clause does not exist in the knowledge base.\n")
-                   #f)
-                 (begin
-                   (kb-param new-kb)
-                   #t))))]
-      
-      ;; Handle list command
-      [(regexp-match #px"^list\\.$" line)
-       (if (null? (kb-param))
-           (printf "Knowledge base is empty.\n")
-           (begin
-             (printf "Current clauses in KB:\n")
-             (for-each (lambda (c) (printf "  ~a\n" (pretty-print-clause c))) (kb-param))))
-       #t]
-      
       ;; Handle queries
-      [(regexp-match #px"^\\?-\\s+(.*)$" line)
-       (define query-str (cadr (regexp-match #px"^\\?-\\s+(.*)$" line)))
+      [(regexp-match #px"^(.*)\\?$" line)
+       (define query-str (cadr (regexp-match #px"^(.*)\\?$" line)))
        (define goals (parse-query query-str))
        (define results (resolve (kb-param) goals '()))
        (if (null? results)
