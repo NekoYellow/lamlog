@@ -9,7 +9,7 @@
          rule rule? rule-head rule-body
          resolve
          symbol->term parse-term parse-query parse-clause
-         pretty-print-term print-subst pretty-print-clause
+         pretty-print-term pretty-print-subst pretty-print-clause
          kb-param
          clause-exists? clause-conflicts?
          validate-clause-str validate-query-str) ;; Add these exports
@@ -261,9 +261,9 @@
       ".")]
     [else "(unknown clause)"]))
 
-(define (print-subst subst query)
+(define (pretty-print-subst subst query)
   (define result (apply-subst subst (car query)))
-  (printf "~a\n" (pretty-print-term result)))
+  (pretty-print-term result))
 
 ;; ----------------------
 ;; Knowledge Base Parameter

@@ -44,12 +44,13 @@
        (define goals (parse-query query-str))
        (define results (resolve (kb-param) goals '()))
        (if (null? results)
-           (printf "false.\n")
-           (begin
-             (printf "true.\n")
-             (for-each
-              (lambda (s) (print-subst s goals))
-              results)))
+        (printf "false.\n")
+        (let ([outputs
+              (remove-duplicates
+                (map (lambda (r) (pretty-print-subst r goals))
+                    results))])
+          (printf "true.\n")
+          (for-each (lambda (s) (printf "~a\n" s)) outputs)))
        #t]
       
       ;; Unrecognized command
