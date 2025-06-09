@@ -11,7 +11,8 @@
          symbol->term parse-term parse-query parse-clause
          pretty-print-term print-subst pretty-print-clause
          kb-param
-         clause-exists? clause-conflicts?)
+         clause-exists? clause-conflicts?
+         validate-clause-str validate-query-str) ;; Add these exports
 
 ;; ----------------------
 ;; Term definitions
@@ -149,15 +150,75 @@
      (compound (car lst) (map symbol->term (cdr lst)))]
     [(symbol? lst) (symbol->term lst)]))
 
+;; ----------------------
+;; Syntax Validation
+;; ----------------------
+
+;; Validate a clause string before parsing
+(define (validate-clause-str str)
+  (cond
+    ;; Check for empty clause
+    [(regexp-match #px"^\\s*$" str)
+     (error "Empty clause is not allowed")]
+    ;; Check for empty parentheses
+    [(regexp-match #px"^\\s*\\(\\s*\\)\\s*$" str)
+     (error "Empty parentheses are not allowed in a clause")]
+    ;; Check for unbalanced parentheses
+    [(let ([open-count (count-chars str #\()]
+           [close-count (count-chars str #\))])
+       (not (= open-count close-count)))
+     (error "Unbalanced parentheses in clause")]
+    ;; Check for missing head in rule
+    [(regexp-match #px"^\\s*\\(\\s*:-" str)
+     (error "Rule is missing a head")]
+    ;; Check for missing body in rule
+    [(or (regexp-match #px":-\\s*\\)\\s*$" str)
+         (regexp-match #px":-\\s*$" str))
+     (error "Rule is missing a body")]
+    ;; Otherwise, the syntax looks valid
+    [else #t]))
+
+;; Validate a query string before parsing
+(define (validate-query-str str)
+  (cond
+    ;; Check for empty query
+    [(regexp-match #px"^\\s*$" str)
+     (error "Empty query is not allowed")]
+    ;; Check for empty parentheses
+    [(regexp-match #px"^\\s*\\(\\s*\\)\\s*$" str)
+     (error "Empty parentheses are not allowed in a query")]
+    ;; Check for unbalanced parentheses
+    [(let ([open-count (count-chars str #\()]
+           [close-count (count-chars str #\))])
+       (not (= open-count close-count)))
+     (error "Unbalanced parentheses in query")]
+    ;; Otherwise, the syntax looks valid
+    [else #t]))
+
+;; Helper function to count occurrences of a character in a string
+(define (count-chars str char)
+  (define len (string-length str))
+  (let loop ([i 0] [count 0])
+    (if (= i len)
+        count
+        (loop (add1 i)
+              (if (char=? (string-ref str i) char)
+                  (add1 count)
+                  count)))))
+
+;; Update parse-query to use validation
 (define (parse-query str)
+  (validate-query-str str)
   (define sexpr (with-input-from-string str read))
   (list (parse-term sexpr)))
 
+;; Update parse-clause to use validation
 (define (parse-clause str)
+  (validate-clause-str str)
   (define sexpr (with-input-from-string str read))
   (cond
     ;; Case 1: (:- Head Body1 Body2 ...)
-    [(and (list? sexpr) (equal? (car sexpr) ':-)) 
+    [(and (list? sexpr) (equal? (car sexpr) ':-))
      (rule (parse-term (cadr sexpr))
            (map parse-term (cddr sexpr)))]
     ;; Case 2: (Head :- Body1 Body2 ...)

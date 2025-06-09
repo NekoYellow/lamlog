@@ -25,27 +25,39 @@
             ;; Assertz command
             [(regexp-match #px"^assertz\\((.*)\\)\\.$" line)
              (define clause-str (regexp-match #px"^assertz\\((.*)\\)\\.$" line))
-             (define new-clause (parse-clause (cadr clause-str)))
-             (cond
-               [(clause-exists? new-clause (kb-param))
-                (printf "Error: Clause already exists in the knowledge base.\n")]
-               [(clause-conflicts? new-clause (kb-param))
-                (printf "Error: Clause conflicts with existing clauses.\n")]
-               [else
-                (begin
-                   (kb-param (append (kb-param) (list new-clause)))
-                   (printf "true.\n"))])]
+             (define clause-content (cadr clause-str))
+             ;; Check for empty or malformed clause
+             (if (or (string=? clause-content "")
+                     (regexp-match #px"^\\s*$" clause-content)
+                     (regexp-match #px"^\\s*\\(\\s*\\)\\s*$" clause-content))
+                 (printf "Error: Empty or malformed clause in assertz command.\n")
+                 (let ([new-clause (parse-clause clause-content)]) ;; Changed define to let
+                   (cond
+                     [(clause-exists? new-clause (kb-param))
+                      (printf "Error: Clause already exists in the knowledge base.\n")]
+                     [(clause-conflicts? new-clause (kb-param))
+                      (printf "Error: Clause conflicts with existing clauses.\n")]
+                     [else
+                      (begin
+                         (kb-param (append (kb-param) (list new-clause)))
+                         (printf "true.\n"))])))]
             ;; Retract command
             [(regexp-match #px"^retract\\((.*)\\)\\.$" line)
              (define clause-str (regexp-match #px"^retract\\((.*)\\)\\.$" line))
-             (define clause-to-remove (parse-clause (cadr clause-str)))
-             (define original-kb (kb-param))
-             (define new-kb (filter (lambda (c) (not (equal? c clause-to-remove))) original-kb))
-             (if (= (length original-kb) (length new-kb))
-                 (printf "Error: Clause does not exist in the knowledge base.\n")
-                 (begin
-                   (kb-param new-kb)
-                   (printf "true.\n")))]
+             (define clause-content (cadr clause-str))
+             ;; Check for empty or malformed clause
+             (if (or (string=? clause-content "")
+                     (regexp-match #px"^\\s*$" clause-content)
+                     (regexp-match #px"^\\s*\\(\\s*\\)\\s*$" clause-content))
+                 (printf "Error: Empty or malformed clause in retract command.\n")
+                 (let ([clause-to-remove (parse-clause clause-content)]) ;; Changed define to let
+                   (define original-kb (kb-param))
+                   (define new-kb (filter (lambda (c) (not (equal? c clause-to-remove))) original-kb))
+                   (if (= (length original-kb) (length new-kb))
+                       (printf "Error: Clause does not exist in the knowledge base.\n")
+                       (begin
+                         (kb-param new-kb)
+                         (printf "true.\n")))))]
             ;; List command
             [(regexp-match #px"^list\\.$" line)
              (if (null? (kb-param))
