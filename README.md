@@ -38,7 +38,7 @@ Each line is either one of the following:
 - A blank line.
 
 There are certain restrictions of the naming of variables and constants:
-- Variables must start with a lowercase letter.
+- Variables must consist of a lowercase letters or digits.
 - Constants must be a single uppercase letter.
 
 Run a script file:
