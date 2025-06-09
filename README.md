@@ -1,4 +1,4 @@
-# $\lambda$Log
+# $\lambda$ Log
 
 **LambdaLog** is a Prolog-like logic programming language implemented in Racket. It supports facts, rules, and queries based on term unification and backward chaining resolution. LambdaLog can be used interactively via a REPL or execute a script containing logical clauses and queries.
 
