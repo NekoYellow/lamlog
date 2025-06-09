@@ -66,7 +66,7 @@
                    (printf "Current clauses in KB:\n")
                    (for-each (lambda (c) (printf "  ~a\n" (pretty-print-clause c))) (kb-param))))]
             ;; Query
-            [else
+            [(regexp-match #px"^(.*)\\?$" line)
              (define query-str (regexp-match #px"^(.*)\\?$" line))
              (define goals (parse-query (cadr query-str)))
              (define results (resolve (kb-param) goals '()))
@@ -76,7 +76,9 @@
                    (printf "true.\n")
                    (for-each
                     (lambda (s) (print-subst s goals))
-                    results)))])
+                    results)))]
+            [else
+             (printf "Error: Invalid command.\n")])
           (loop)))))
 
 ;; Start the REPL when this file is executed directly
