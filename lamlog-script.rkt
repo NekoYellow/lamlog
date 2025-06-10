@@ -14,10 +14,6 @@
                                (printf "Error: ~a\n" (exn-message e))
                                #f)])
     (cond
-      ;; Skip empty lines and comments
-      [(regexp-match #px"^\\s*$" line) #t]
-      [(regexp-match #px"^\\s*;;" line) #t]
-      
       ;; Handle assertz command
       [(regexp-match #px"^(.*)\\.$" line)
        (define clause-str (regexp-match #px"^(.*)\\.$" line))
@@ -70,9 +66,10 @@
       (let loop ()
         (define line (read-line port))
         (unless (eof-object? line)
-          (set! line-count (add1 line-count))
-          (when (process-script-line line)
-            (set! success-count (add1 success-count)))
+          (unless (or (regexp-match #px"^\\s*$" line) (regexp-match #px"^\\s*;;" line))
+            (set! line-count (add1 line-count))
+            (when (process-script-line line)
+              (set! success-count (add1 success-count))))
           (loop)))))
   
   (printf "Executed ~a of ~a lines from ~a\n"

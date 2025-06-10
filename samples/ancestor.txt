@@ -4,5 +4,4 @@ false.
 true.
 (ancestor bob carol)
 (ancestor bob dave)
-Executed 10 of 10 lines from samples/ancestor
-
+Executed 8 of 8 lines from samples/ancestor

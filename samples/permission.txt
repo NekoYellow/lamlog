@@ -15,5 +15,4 @@ true.
 true.
 (accessible carol doc1 read)
 false.
-Executed 25 of 25 lines from samples/permission
-
+Executed 19 of 19 lines from samples/permission

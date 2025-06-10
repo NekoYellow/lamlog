@@ -14,5 +14,4 @@ true.
 true.
 (less-than 1 2)
 (less-than 0 2)
-Executed 12 of 12 lines from samples/integer
-
+Executed 10 of 10 lines from samples/integer
