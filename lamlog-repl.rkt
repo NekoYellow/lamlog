@@ -52,7 +52,7 @@
                      (regexp-match #px"^\\s*$" clause-content)
                      (regexp-match #px"^\\s*\\(\\s*\\)\\s*$" clause-content))
                  (printf "Error: Empty or malformed clause in retract command.\n")
-                 (let ([clause-to-remove (parse-clause clause-content)]) ;; Changed define to let
+                 (let ([clause-to-remove (parse-clause clause-content)])
                    (define original-kb (kb-param))
                    (define new-kb (filter (lambda (c) (not (equal? c clause-to-remove))) original-kb))
                    (if (= (length original-kb) (length new-kb))
