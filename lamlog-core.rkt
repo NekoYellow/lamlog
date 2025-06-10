@@ -11,8 +11,8 @@
          symbol->term parse-term parse-query parse-clause
          pretty-print-term pretty-print-subst pretty-print-clause
          kb-param
-         clause-exists? clause-conflicts?
-         validate-clause-str validate-query-str) ;; Add these exports
+         clause-exists?
+         validate-clause-str validate-query-str)
 
 ;; ----------------------
 ;; Term definitions
@@ -234,7 +234,7 @@
 
 (define (pretty-print-term t)
   (cond
-    [(null? t) ""]
+    [(void? t) ""]
     [(atom? t)
      (define n (atom-name t))
      (if (symbol? n)
@@ -251,7 +251,7 @@
 
 (define (pretty-print-clause c)
   (cond
-    [(null? c) ""]
+    [(void? c) ""]
     [(fact? c) (string-append (pretty-print-term (fact-head c)) ".")]
     [(rule? c)
      (string-append
@@ -281,10 +281,3 @@
   (for/or ([existing-clause kb])
     (equal? clause existing-clause)))
 
-(define (clause-conflicts? clause kb)
-  (define head
-    (cond
-      [(fact? clause) (fact-head clause)]
-      [(rule? clause) (rule-head clause)]))
-  (define result (resolve kb (list head) '()))
-  (not (null? result)))

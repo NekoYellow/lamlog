@@ -27,16 +27,18 @@
                (regexp-match #px"^\\s*$" clause-content)
                (regexp-match #px"^\\s*\\(\\s*\\)\\s*$" clause-content))
            (begin
-             (printf "Error: Empty or malformed clause in assertz command.\n")
+             (printf "Error: Empty clause.\n")
              #f)
-           (let ([new-clause (parse-clause clause-content)]) ;; Changed define to let
-             (if (clause-exists? new-clause (kb-param))
-                 (begin
-                   (printf "Error: Clause already exists in the knowledge base.\n")
-                   #f)
-                 (begin
-                   (kb-param (append (kb-param) (list new-clause)))
-                   #t))))]
+           (let ([new-clause (parse-clause clause-content)])
+                   (cond
+                     [(null? new-clause)
+                      (printf "Error: Empty clause.\n") #f]
+                     [(and (fact? new-clause) (void? (fact-head new-clause)))
+                      (printf "Error: Malformed clause.\n") #f]
+                     [(clause-exists? new-clause (kb-param))
+                      (printf "Error: Clause already exists in the knowledge base.\n") #f]
+                     [else
+                      (kb-param (append (kb-param) (list new-clause))) #t])))]
       
       ;; Handle queries
       [(regexp-match #px"^(.*)\\?$" line)

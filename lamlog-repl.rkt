@@ -30,13 +30,15 @@
              (if (or (string=? clause-content "")
                      (regexp-match #px"^\\s*$" clause-content)
                      (regexp-match #px"^\\s*\\(\\s*\\)\\s*$" clause-content))
-                 (printf "Error: Empty or malformed clause in assertz command.\n")
-                 (let ([new-clause (parse-clause clause-content)]) ;; Changed define to let
+                 (printf "Error: Empty clause in assertz command.\n")
+                 (let ([new-clause (parse-clause clause-content)])
                    (cond
+                     [(null? new-clause)
+                      (printf "Error: Empty clause in assertz command.\n")]
+                     [(and (fact? new-clause) (void? (fact-head new-clause)))
+                      (printf "Error: Malformed clause in assertz command.\n")]
                      [(clause-exists? new-clause (kb-param))
                       (printf "Error: Clause already exists in the knowledge base.\n")]
-                     [(clause-conflicts? new-clause (kb-param))
-                      (printf "Error: Clause conflicts with existing clauses.\n")]
                      [else
                       (begin
                          (kb-param (append (kb-param) (list new-clause)))
