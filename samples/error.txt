@@ -1,0 +1,5 @@
+Unrecognized command: ()
+Error: Empty clause.
+Error: Malformed clause.
+Error: Empty parentheses are not allowed in a query
+Executed 0 of 4 lines from samples/error

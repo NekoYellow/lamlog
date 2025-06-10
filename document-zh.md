@@ -203,6 +203,7 @@ unify(likes(X, bob), likes(alice, Y), [])
 `samples/` 目录下有一些示例程序（无后缀名的是源文件，对应的.txt文件的是预期输出），可以通过 `racket lamlog.rkt -f <sample-file> -t`运行。测试脚本`tester.py`可以自动运行所有测试样例。
 
 - `ancestor` 祖先关系。
+- `error` 错误处理。
 - `graph` 图和连通性。
 - `parent` 父辈和祖辈关系。
 - `integer` 自然数。
